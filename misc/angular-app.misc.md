@@ -1,4 +1,4 @@
-## angular-app thoughts
+## Review of angular-app
 
 ##### Bugs
 - Neither 'largestNetworks' nor 'busiestNetworks' are highlighted at first
