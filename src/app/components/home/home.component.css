@@ -238,3 +238,7 @@
   transition: all 0.2s ease;
   animation-delay: inherit;
 }
+
+.active-view {
+  background-color: #1960A6 !important;
+}

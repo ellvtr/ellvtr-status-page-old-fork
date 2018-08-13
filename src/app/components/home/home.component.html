@@ -96,10 +96,12 @@
   <table>
     <tr>
       <td style="border: none">
-        <button type="button" (click)="showLargestNetworks()" label="Largest Tokens" id="largestNetworkButton"><a style="font-size: 100%">Largest Networks</a></button>
+        <button type="button" (click)="showLargestNetworks()" label="Largest Tokens" id="largestNetworkButton"
+        [class.active-view]="largestTokenDisp"><a style="font-size: 100%">Largest Networks</a></button>
       </td>
       <td style="border: none">
-        <button type="button" (click)="showBusiestNetworks()" label="Busiest Tokens"><a style="font-size: 100%">Busiest Networks</a></button>
+        <button type="button" (click)="showBusiestNetworks()" label="Busiest Tokens"
+        [class.active-view]="busiestTokenDisp"><a style="font-size: 100%">Busiest Networks</a></button>
       </td>
     </tr>
   </table>

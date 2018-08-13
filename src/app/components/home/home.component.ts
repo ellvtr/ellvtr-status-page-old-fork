@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    // setTimeout(a=>{ this.showLargestNetworks, console.log('this.showLargestNetworks'); }, 3000);
   }
 
   /*  Get data from server and update local values. 
