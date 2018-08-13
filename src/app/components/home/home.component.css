@@ -159,24 +159,32 @@
 
 .metricsdiv button {
   background-color: black;
-  width: 200px;
-  height: auto;
-  border-left-width: 0;
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 2px;
-  border-bottom-color: white;
+  width: 20rem;
+  margin: auto 1rem;
+  /*width: 200px;*/
+  /*height: auto;*/
+  /*border-left-width: 0;*/
+  /*border-top-width: 0;*/
+  /*border-right-width: 0;*/
+  /*border-bottom-width: 2px;*/
+  /*border-bottom-color: white;*/
+  border: 1px solid #1C60A5;
+  /*border: none;*/
+  border-radius: 6px;
+  padding: 0.3rem;
+  font-size: 100%;
+  /*font-size: 120%;*/
 }
 
 .metricsdiv button:focus{
-  border-bottom-color: #2191FB;
-  border-bottom-width: 2px;
+  /*border-bottom-color: #2191FB;*/
+  /*border-bottom-width: 2px;*/
   outline: 0;
 }
 
 .metricsdiv button.click {
-  border-bottom-color: #2191FB;
-  border-bottom-width: 2px;
+  /*border-bottom-color: #2191FB;*/
+  /*border-bottom-width: 2px;*/
   outline: 0;
 }
 
@@ -242,3 +250,5 @@
 .active-view {
   background-color: #1960A6 !important;
 }
+
+
