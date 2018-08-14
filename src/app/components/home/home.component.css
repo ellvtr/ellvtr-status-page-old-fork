@@ -150,12 +150,14 @@
 
 .metricsdiv td {
   border-bottom: 1px solid dimgray;
+  color: white;
   width: 100px;
   text-align: center;
 }
 
 .metricsdiv th {
   border-bottom: 1px solid dimgrey;
+  color: #BABABA;
 }
 
 .metricsdiv button {
