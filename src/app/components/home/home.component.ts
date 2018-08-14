@@ -141,43 +141,6 @@ export class HomeComponent implements OnInit {
     return res;
   }
 
-  /*  Get address string based on position in array. 
-      Causes error when executed by angular when array does not exist yet. 
-      Method redundant: Access data directly in template and use ng-for to repeat 4 times. 
-  */
-  public getIndexedNetworkAddress(i: number, list: Array<NMComparativeMetrics>) {
-    // console.log('getIndexedNetworkAddress list ', typeof list);
-    // if (typeof list === 'undefined') { console.log('getIndexedNetworkAddress no list'); list = []; }
-    // if (typeof list === 'undefined') { console.log('getIndexedNetworkAddress no list'); return ''; }
-    // if (!list || typeof list.length === 'undefined') { console.log('getIndexedNetworkAddress no list'); return; }
-    if (i >= list.length) {
-      return '';
-    } else {
-      return list[i].tokenAddress;
-    }
-  }
-
-  /*  Get # channels based on position in array. 
-      Causes error when executed by angular when array does not exist yet. 
-      Method redundant: Access data directly in template and use ng-for to repeat 4 times. 
-  */
-  public getIndexedMetric(i: number, list: Array<NMComparativeMetrics>) {
-    if (i >= list.length) {
-      return null;
-    } else {
-      return list[i].metricValue;
-    }
-  }
-
-  /*  Roughly the same as the 2 above ... */
-  public getIndexedSecondaryMetric(i: number, list: Array<NMComparativeMetrics>) {
-    if (i >= list.length) {
-      return null;
-    } else {
-      return list[i].secondaryMetricValue;
-    }
-  }
-
   public scrollToA(loc: string) {
     document.getElementById(loc).scrollIntoView();
   }

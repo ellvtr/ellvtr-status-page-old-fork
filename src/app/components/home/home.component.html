@@ -102,113 +102,21 @@
 <div class="metricsdiv" align="center" *ngIf="largestNetworks && largestTokenDisp" style="padding-top: 0">
   <table cellpadding="17" align="center">
     <tr>
-      <td align="center">
-        <a style="color: #BABABA">Token Address</a>
-      </td>
+      <td><a style="color: #BABABA">Token Address</a></td>
       <td></td>
-      <td align="center">
-        <a style="color: #BABABA">Channels</a>
-      </td>
+      <td><a style="color: #BABABA">Channels</a></td>
       <td></td>
-      <td align="center">
-        <a style="color: #BABABA">Users</a>
-      </td>
+      <td><a style="color: #BABABA">Users</a></td>
     </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{getIndexedNetworkAddress(0, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedSecondaryMetric(0, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedMetric(0, largestNetworks)}}
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{getIndexedNetworkAddress(1, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedSecondaryMetric(1, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedMetric(1, largestNetworks)}}
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{getIndexedNetworkAddress(2, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedSecondaryMetric(2, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedMetric(2, largestNetworks)}}
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{getIndexedNetworkAddress(3, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedSecondaryMetric(3, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedMetric(3, largestNetworks)}}
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{getIndexedNetworkAddress(4, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedSecondaryMetric(4, largestNetworks)}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{getIndexedMetric(4, largestNetworks)}}
-        </a>
-      </td>
-    </tr>
+    <ng-template ngFor let-i="index" let-ntw [ngForOf]="largestNetworks">
+      <tr *ngIf="i<5">
+        <td><a>{{ntw.tokenAddress}}</a></td>
+        <td></td>
+        <td><a>{{ntw.metricValue}}</a></td>
+        <td></td>
+        <td><a>{{ntw.secondaryMetricValue}}</a></td>
+      </tr>
+    </ng-template>
   </table>
 </div> <!-- largestTokenDisp -->
 
@@ -216,113 +124,27 @@
 <div class="metricsdiv" align="center" *ngIf="busiestNetworks && busiestTokenDisp" style="padding-top: 0">
   <table cellpadding="17" align="center">
     <tr>
-      <td align="center">
+      <td>
         <a style="color: #BABABA">Token Address</a>
       </td>
       <td></td>
-      <td align="center">
+      <td>
         <a style="color: #BABABA">Channels</a>
       </td>
       <td></td>
-      <td align="center">
+      <td>
         <a style="color: #BABABA">Users</a>
       </td>
     </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{busiestNetworks[0].tokenAddress}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[0].metricValue}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[0].secondaryMetricValue}}
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{busiestNetworks[1].tokenAddress}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[1].metricValue}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[1].secondaryMetricValue}}
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{busiestNetworks[2].tokenAddress}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[2].metricValue}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[2].secondaryMetricValue}}
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{busiestNetworks[3].tokenAddress}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[3].metricValue}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[3].secondaryMetricValue}}
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a>
-          {{busiestNetworks[4].tokenAddress}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[4].metricValue}}
-        </a>
-      </td>
-      <td></td>
-      <td align="center">
-        <a>
-          {{busiestNetworks[4].secondaryMetricValue}}
-        </a>
-      </td>
-    </tr>
+    <ng-template ngFor let-i="index" let-ntw [ngForOf]="busiestNetworks">
+      <tr *ngIf="i<5">
+        <td><a>{{ntw.tokenAddress}}</a></td>
+        <td></td>
+        <td><a>{{ntw.metricValue}}</a></td>
+        <td></td>
+        <td><a>{{ntw.secondaryMetricValue}}</a></td>
+      </tr>
+    </ng-template>
   </table>
 </div> <!-- busiestTokenDisp -->
 
