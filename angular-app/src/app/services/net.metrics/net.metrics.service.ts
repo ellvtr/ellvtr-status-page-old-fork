@@ -108,6 +108,8 @@ export class NetMetricsService {
         secondaryMetricValue: tokenInfo[that.numUsersKey]
       });
     }
+    // To be removed; the purpose is visible change of mock data in UI:
+    this.busiestNetworks.reverse();
   }
 
   /*  Run through users in new data; if new entries,
