@@ -6,89 +6,61 @@
   <a style="font-size: 17px; font-weight: 100">Metrics for the Raiden testnet release</a>
 </div>
 <div class="abstractinfodisp" align="center" id="abstractView">
+  
   <table cellpadding="15">
     <tr>
+      <td><img src="../../../assets/networks_icon.png"></td>
       <td>
-        <img src="../../../assets/networks_icon.png">
-      </td>
-      <td>
-        <div>
-          <a class="innertablediv" style="font-size: 17px" target="_blank">
-            Token Networks
-          </a>
-        </div>
+        <div><a class="innertablediv" style="font-size: 17px" target="_blank">Token Networks</a></div>
         <div align="left" class="innertablediv">
-          <a>
-            {{numNetworks}}
-          </a>
+          <a>{{numNetworks}}</a>
         </div>
       </td>
       <td></td><td></td><td></td><td></td><td></td>
+      <td><img src="../../../assets/channels_icon.png"></td>
       <td>
-        <img src="../../../assets/channels_icon.png">
-      </td>
-      <td>
-        <div>
-          <a class="innertablediv" style="font-size: 17px" target="_blank">
-            Open Channels
-          </a>
-        </div>
-        <div align="left" class="innertablediv">
-          <a>
-            {{numTotalChannels}}
-          </a>
-        </div>
+        <div><a class="innertablediv" style="font-size: 17px" target="_blank">Open Channels</a></div>
+        <div align="left" class="innertablediv"><a>{{numTotalChannels}}</a></div>
       </td>
       <td></td><td></td><td></td><td></td><td></td>
+      <td><img src="../../../assets/users_icon.png"></td>
       <td>
-        <img src="../../../assets/users_icon.png">
-      </td>
-      <td>
-        <div>
-          <a style="font-size: 17px" target="_blank">
-            Unique Users
-          </a>
-        </div>
-        <div align="left" class="innertablediv">
-          <a>
-            {{numUniqueUsers}}
-          </a>
-        </div>
+        <div><a style="font-size: 17px" target="_blank">Unique Users</a></div>
+        <div align="left" class="innertablediv"><a>{{numUniqueUsers}}</a></div>
       </td>
     </tr>
   </table>
+
   <table cellpadding="10">
     <tr>
       <td>
         <a href="http://raiden-network.readthedocs.io/en/stable/webui_tutorial.html#tokens" style="border: 1px solid #2191FB; border-radius: 6px; color: #2191FB; width: 200px; font-size: 14px; padding: 7px">
           Token registration tutorial
-          <span class="tooltiptext">Learn how to register a token</span>
-        </a>
+          <span class="tooltiptext">Learn how to register a token</span></a>
       </td>
       <td></td><td></td><td></td><td></td>
       <td>
         <a href="http://raiden-network.readthedocs.io/en/stable/webui_tutorial.html#channels" style="border: 1px solid #2191FB; border-radius: 6px; color: #2191FB; width: 200px; padding: 7px; font-size: 14px">
           Channel creation tutorial
-          <span class="tooltiptext">Learn how to open a channel</span>
-        </a>
+          <span class="tooltiptext">Learn how to open a channel</span></a>
       </td>
       <td></td><td></td><td></td><td></td>
       <td>
         <a href="http://raiden.network/" style="border: 1px solid #2191FB; border-radius: 6px; color: #2191FB; width: 200px; font-size: 14px; padding: 7px">
           Get Started
-          <span class="tooltiptext">Get started with the Raiden Network</span>
-        </a>
+          <span class="tooltiptext">Get started with the Raiden Network</span></a>
       </td>
       <td></td><td></td><td></td><td></td>
       <td>
         <a (click)="scrollToA('netVis')" style="cursor: pointer;border: 1px solid #2191FB; border-radius: 6px; color: #2191FB; width: 200px; font-size: 14px; padding: 7px">
           Visualize
-          <span class="tooltiptext">Interactive visualization of the Raiden Network</span>
-        </a>
+          <span class="tooltiptext">Interactive visualization of the Raiden Network</span></a>
       </td>
     </tr>
   </table>
-</div>
+
+</div> <!-- class="abstractinfodisp" id="abstractView" -->
+
 <div class="metricsdiv" align="center">
   <button type="button" (click)="showLargestNetworks()" label="Largest Tokens"
       [class.active-view]="largestTokenDisp" class="clickable">
@@ -129,7 +101,6 @@
 
 </div> <!-- container -->
 
-<footer>
 <div class="networkpage" align="center" style='height: 85vh; width: 100vw'>
   <a id="netVis" style="font-size: 35px; font-weight: 100">Network Visualization</a>
   <p>
@@ -146,6 +117,8 @@
   </p>
   <graph [nodes]="nodes" [links]="links" align="center"></graph>
 </div>
+
+<footer>
   <div style="background-color: white; height: auto" class="networkpage" align="center">
     <p style="padding: 2%">
       <a (click)="scrollToA('top')" style="cursor: pointer ;border: 1px solid black; border-radius: 6px; color: black; width: 200px; font-size: 14px; padding: 7px">
