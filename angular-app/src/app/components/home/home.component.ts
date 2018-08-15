@@ -25,60 +25,61 @@ export class HomeComponent implements OnInit {
   public refreshToggle = true;
 
   constructor(private netMetricsService: NetMetricsService, private sharedService: SharedService) {
-    this.updateMetrics();
+    // this.updateMetrics();
   }
 
   ngOnInit() {
+    this.updateMetrics();
     // setTimeout(a=>{ this.showLargestNetworks, console.log('this.showLargestNetworks'); }, 3000);
   }
 
   /*  Get data from server and update local values. 
-      It has much repeated and redundant code; error prone and messy
-      It calls `service.updateCurrentMetrics`, then runs redunant methods on the service
-      (they are run within `updateCurrentMetrics`), then typed the same sequense again
-      within a `setInterval`. 
   */
   public updateMetrics() {
     const that = this;
-    this.netMetricsService.updateCurrentMetrics()
+
+    // Update local metric variables from the nmservice:
+    const _updMetrics = ()=>{
+      that.currentMetrics = that.netMetricsService.getCurrentMetrics();
+      that.netMetricsService.updateTotalsAndComparativeMetrics();
+      that.numUniqueUsers = that.netMetricsService.getNumUniqueUsers();
+      that.numNetworks = that.netMetricsService.getNumNetworks();
+      that.numTotalChannels = that.netMetricsService.getTotalChannels();
+      that.largestNetworks = that.netMetricsService.getLargestNetworks();
+      that.busiestNetworks = that.netMetricsService.getBusiestNetworks();
+    };
+
+    // Update d3 chart/graph data from service:
+    // (no need for promise; refactor to sequence)
+    const _updGraphData = ()=>{
+      that.netMetricsService.restructureAndPersistData()
       .then((res: any) => {
-        that.currentMetrics = that.netMetricsService.getCurrentMetrics();
-        that.netMetricsService.updateTotalsAndComparativeMetrics();
-        that.numUniqueUsers = that.netMetricsService.getNumUniqueUsers();
-        that.numNetworks = that.netMetricsService.getNumNetworks();
-        that.numTotalChannels = that.netMetricsService.getTotalChannels();
-        that.largestNetworks = that.netMetricsService.getLargestNetworks();
-        that.busiestNetworks = that.netMetricsService.getBusiestNetworks();
-        that.netMetricsService.restructureAndPersistData()
-          .then((res2: any) => {
-          setInterval(() => {
-            this.netMetricsService.updateCurrentMetrics()
-              .then((res1: any) => {
-                that.currentMetrics = that.netMetricsService.getCurrentMetrics();
-                that.netMetricsService.updateTotalsAndComparativeMetrics();
-                that.numUniqueUsers = that.netMetricsService.getNumUniqueUsers();
-                that.numNetworks = that.netMetricsService.getNumNetworks();
-                that.numTotalChannels = that.netMetricsService.getTotalChannels();
-                that.largestNetworks = that.netMetricsService.getLargestNetworks();
-                that.busiestNetworks = that.netMetricsService.getBusiestNetworks();
-                that.netMetricsService.restructureAndPersistData()
-                  .then((res3: any) => {
-                    if (that.refreshToggle) {
-                      that.initGraphData();
-                      that.refreshToggle = false;
-                    }
-                    /*console.log('updateMetrics updateCurrentMetrics res3: that.nodes, that.links'
-                      , that.nodes, that.links);*/
-                  })
-                  .catch();
-              })
-              .catch();
-          }, 3000);
-        })
-          .catch();
+        that.initGraphData();
       })
-      .catch();
-  }
+      .catch(e=>{
+        console.log('Error getting graph data: ', e);
+      });
+    };
+
+    // Get metrics from server,then update local values:
+    // (should be done by service, not component; refactor)
+    const _getMetrics = ()=>{
+      that.netMetricsService.updateCurrentMetrics()
+      .then((res: any) => { 
+        _updMetrics();
+        _updGraphData();
+      }).catch(e=>{
+        console.log('Error getting metrics: ', e)
+      });
+    }
+
+    // Do it now and at interval:
+    // (temp: clears interval after a while to spare server)
+    _getMetrics();
+    const si = setInterval(_getMetrics, 3000);
+    setTimeout(a=>{ clearInterval(si) }, 12e3)
+
+  } // updateMetrics
 
   /*  Set values to show/hide correct view */
   public showLargestNetworks() {
@@ -102,7 +103,7 @@ export class HomeComponent implements OnInit {
     that.netMetricsService.retrievePersistedDataForGraph()
       .then((res: NMResponse) => {
         const persistedData = res.body;
-        // console.log('initGraphData: persistedData', persistedData);
+        console.log('initGraphData: persistedData', persistedData);
         const psuedoNodes = persistedData['nodes'];
         const pseudoLinks = persistedData['links'];
         that.nodes = [];

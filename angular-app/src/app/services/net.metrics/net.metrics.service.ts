@@ -12,6 +12,7 @@ import {NMRestructuredData} from '../../models/NMRestructuredData';
 export class NetMetricsService {
 
   private currentMetrics: any = {};
+  private restructuredData: NMRestructuredData;
   private numNetworks = 0;
   private numTotalChannels = 0;
   private numUniqueUsers = 0;
@@ -148,7 +149,7 @@ export class NetMetricsService {
           },
           (err: any) => {
             reject({
-              code: 200,
+              code: 400,
               body: err
             });
           });
@@ -178,11 +179,11 @@ export class NetMetricsService {
     });
   }
 
-  /*  This method is a mystery:
-      - Why does it use PUT iso GET?
-      - What is the `restructuredData` for?
-      - Why PUT it to the server?
-      - Why is it only called twice from home.component?
+  /*  Restructure metric data to fit d3 chart
+      Returs promise: Currently PUT to server and async;
+      no need for that. 
+      Refactor to store data in memory and return 
+      data directly, not through async promise. 
   */
   public restructureAndPersistData() {
     return new Promise<NMResponse>((fulfill, reject) => {
@@ -195,6 +196,7 @@ export class NetMetricsService {
           restructuredData.nodes.push({
             node: obj[that.tokenAddressKey],
             address: obj[that.tokenAddressKey],
+            id: obj[that.tokenAddressKey],
             weight: Math.floor(Math.random() * 999) + 100,
             numChannels: obj[that.numChannelsKey]
           }); // push
@@ -205,34 +207,41 @@ export class NetMetricsService {
               target: channel[that.channelTargetKey],
             });
           } // for
-          numNetworksRecorded++;
+          numNetworksRecorded++; 
+          // Why do this inside the loop? Why not run below request when loop is done?
+          // No need after refactor to sequence iso async promise. 
           if (numNetworksRecorded === that.currentMetrics[that.numNetworksKey]) {
+            that.restructuredData = restructuredData; //console.log('restructuredData created',restructuredData);
             that.http.put(that.restructuredDataEndpoint, restructuredData)
-              .subscribe((res: any) => {
-                fulfill({
-                  code: 200,
-                  body: res
-                });
-              },
+              .subscribe(
+                (res: any) => {
+                  fulfill({
+                    code: 200,
+                    body: res
+                  });
+                },
                 (err: any) => {
-                reject({
-                  code: 400,
-                  body: err
-                });
-                });
+                  reject({
+                    code: 400,
+                    body: err
+                  });
+                }
+              );
           } // if (numNetworksRecorded
         } // if(!(key ...
       }); // Object.keys .. .map
+      console.log('restructureAndPersistData: done with "Object.keys .. .map". restructuredData:', restructuredData);
     }); // return new Promies
   } // restructureAndPersistData
 
   /*  Get d3 chart data with `GET` request. Returns promise. 
       Called currently from 
       `src/app/components/home/home.component.ts` and `src/app/services/graph.visual/graph.visual.service.ts`
+      No need for promise anymore; refactor to return data directly iso acync promise. 
   */
   public retrievePersistedDataForGraph() {
     const that = this;
-    return new Promise<NMResponse>((fulfill, reject) => {
+/*    return new Promise<NMResponse>((fulfill, reject) => {
       that.http.get(that.restructuredDataEndpoint)
         .subscribe
         ((res: any) => {
@@ -247,6 +256,20 @@ export class NetMetricsService {
             body: err
           });
         });
+    });*/ 
+    // Temporary fix using json file because restructuredData causes error:
+    const data = require('../../../../../mock/data/graphics-data.json');
+    // No need for promise; refactor to return data directly:
+    return new Promise<NMResponse>((fulfill, reject)=>{
+      // console.log('that.restructuredData requested', that.restructuredData, data);
+      if(that.restructuredData){
+        // console.log('that.restructuredData requested', that.restructuredData, data);
+        // fulfill({code: 200, body: null});
+        fulfill({code: 200, body: data});
+        // fulfill({code: 200, body: that.restructuredData});
+      } else {
+        reject({code: 400, body: new Error("No data")});
+      }
     });
   }
 
