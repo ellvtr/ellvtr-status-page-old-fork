@@ -180,97 +180,44 @@ export class NetMetricsService {
   }
 
   /*  Restructure metric data to fit d3 chart
-      Returs promise: Currently PUT to server and async;
-      no need for that. 
-      Refactor to store data in memory and return 
-      data directly, not through async promise. 
+      Returns the restructed data and also sets it
+      to the `this.restructuredData` property. 
   */
-  public restructureAndPersistData() {
-    return new Promise<NMResponse>((fulfill, reject) => {
-      const that = this;
-      let numNetworksRecorded = 0;
-      const restructuredData: NMRestructuredData = {nodes: [], links: []};
-      Object.keys(this.currentMetrics).map((key: string) => {
-        if (!(key === that.numNetworksKey)) {
-          const obj = that.currentMetrics[key];
-          restructuredData.nodes.push({
-            node: obj[that.tokenAddressKey],
-            address: obj[that.tokenAddressKey],
-            id: obj[that.tokenAddressKey],
-            weight: Math.floor(Math.random() * 999) + 100,
-            numChannels: obj[that.numChannelsKey]
-          }); // push
-          const objChannels = obj[that.channelsKey];
-          for (const channel of objChannels) {
-            restructuredData.links.push({
-              source: channel[that.channelSourceKey],
-              target: channel[that.channelTargetKey],
-            });
-          } // for
-          numNetworksRecorded++; 
-          // Why do this inside the loop? Why not run below request when loop is done?
-          // No need after refactor to sequence iso async promise. 
-          if (numNetworksRecorded === that.currentMetrics[that.numNetworksKey]) {
-            that.restructuredData = restructuredData; //console.log('restructuredData created',restructuredData);
-            that.http.put(that.restructuredDataEndpoint, restructuredData)
-              .subscribe(
-                (res: any) => {
-                  fulfill({
-                    code: 200,
-                    body: res
-                  });
-                },
-                (err: any) => {
-                  reject({
-                    code: 400,
-                    body: err
-                  });
-                }
-              );
-          } // if (numNetworksRecorded
-        } // if(!(key ...
-      }); // Object.keys .. .map
-      console.log('restructureAndPersistData: done with "Object.keys .. .map". restructuredData:', restructuredData);
-    }); // return new Promies
+  public restructureAndPersistData(): NMRestructuredData {
+    const that = this;
+    const restructuredData: NMRestructuredData = {nodes: [], links: []};
+    // 
+    Object.keys(this.currentMetrics).map((key: string) => {
+      if (!(key === that.numNetworksKey)) {
+        const obj = that.currentMetrics[key];
+        restructuredData.nodes.push({
+          node: obj[that.tokenAddressKey],
+          address: obj[that.tokenAddressKey],
+          id: obj[that.tokenAddressKey],
+          weight: Math.floor(Math.random() * 999) + 100,
+          numChannels: obj[that.numChannelsKey]
+        }); // push
+        const objChannels = obj[that.channelsKey];
+        for (const channel of objChannels) {
+          restructuredData.links.push({
+            source: channel[that.channelSourceKey],
+            target: channel[that.channelTargetKey],
+          });
+        } // for
+      } // if(!(key ...
+    }); // Object.keys .. .map
+    console.log('restructureAndPersistData: done with "Object.keys .. .map". restructuredData:', restructuredData);
+    this.restructuredData = restructuredData;
+    return restructuredData;
   } // restructureAndPersistData
 
-  /*  Get d3 chart data with `GET` request. Returns promise. 
-      Called currently from 
-      `src/app/components/home/home.component.ts` and `src/app/services/graph.visual/graph.visual.service.ts`
-      No need for promise anymore; refactor to return data directly iso acync promise. 
+  /*  Get d3 chart data. 
+      Returns the data;
   */
-  public retrievePersistedDataForGraph() {
-    const that = this;
-/*    return new Promise<NMResponse>((fulfill, reject) => {
-      that.http.get(that.restructuredDataEndpoint)
-        .subscribe
-        ((res: any) => {
-          fulfill({
-            code: 200,
-            body: res
-          });
-        },
-        (err: any) => {
-          reject({
-            code: 400,
-            body: err
-          });
-        });
-    });*/ 
+  public retrievePersistedDataForGraph(): NMRestructuredData {
     // Temporary fix using json file because restructuredData causes error:
     const data = require('../../../../../mock/data/graphics-data.json');
-    // No need for promise; refactor to return data directly:
-    return new Promise<NMResponse>((fulfill, reject)=>{
-      // console.log('that.restructuredData requested', that.restructuredData, data);
-      if(that.restructuredData){
-        // console.log('that.restructuredData requested', that.restructuredData, data);
-        // fulfill({code: 200, body: null});
-        fulfill({code: 200, body: data});
-        // fulfill({code: 200, body: that.restructuredData});
-      } else {
-        reject({code: 400, body: new Error("No data")});
-      }
-    });
+    return data;
   }
 
   // Getters and setters

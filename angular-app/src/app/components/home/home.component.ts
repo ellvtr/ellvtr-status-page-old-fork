@@ -3,7 +3,8 @@ import {NetMetricsService} from '../../services/net.metrics/net.metrics.service'
 import {SharedService} from '../../services/net.metrics/shared.service';
 import {NMComparativeMetrics} from '../../models/NMComparativeMetrics';
 import {Link, Node} from '../../services/d3/models';
-import {NMResponse} from '../../models/NMResponse';
+// import {NMResponse} from '../../models/NMResponse';
+import {NMRestructuredData} from '../../models/NMRestructuredData';
 
 @Component({
   selector: 'app-home',
@@ -52,13 +53,9 @@ export class HomeComponent implements OnInit {
     // Update d3 chart/graph data from service:
     // (no need for promise; refactor to sequence)
     const _updGraphData = ()=>{
-      that.netMetricsService.restructureAndPersistData()
-      .then((res: any) => {
-        that.initGraphData();
-      })
-      .catch(e=>{
-        console.log('Error getting graph data: ', e);
-      });
+      const rsData: NMRestructuredData = that.netMetricsService.restructureAndPersistData();
+      console.log('_updGraphData', rsData);
+      that.initGraphData();
     };
 
     // Get metrics from server,then update local values:
@@ -94,39 +91,31 @@ export class HomeComponent implements OnInit {
   }
 
   /*  Get data for d3 chart. Sets local `nodes` and `links` values. 
-      Uses `netMetricsService.retrievePersistedDataForGraph` w `GET` 
-      request to api. 
-      Called at `setInterval` by `updateMetrics`. 
+      Uses `netMetricsService.retrievePersistedDataForGraph`. 
   */
   public initGraphData() {
     const that = this;
-    that.netMetricsService.retrievePersistedDataForGraph()
-      .then((res: NMResponse) => {
-        const persistedData = res.body;
-        console.log('initGraphData: persistedData', persistedData);
-        const psuedoNodes = persistedData['nodes'];
-        const pseudoLinks = persistedData['links'];
-        that.nodes = [];
-        that.links = [];
-        // Instantiate real Node insances iso literal object:
-        for (const pseudoNode of psuedoNodes) {
-          const node = new Node(pseudoNode['id']);
-          // const node = new Node(pseudoNode['address']); // Here's where the bug is at: 'id' iso 'address'
-          node.x = Math.floor(Math.random() * 600) + 100;
-          node.y = Math.floor(Math.random() * 600) + 100;
-          node.linkCount = pseudoNode['numChannels'];
-          that.nodes.push(node);
-        }
-        // Get the real Node instance iso literal object:
-        for (const pseudoLink of pseudoLinks) {
-          // const link = new Link(pseudoLink['source'], pseudoLink['target']);
-          const link = new Link(that.getMatchingNode(pseudoLink['source'], that.nodes), that.getMatchingNode(pseudoLink['target'], that.nodes));
-          that.links.push(link);
-        }
-      })
-      .catch((err: any) => {
-        console.log('initGraphData error:', err);
-      });
+    const persistedData = that.netMetricsService.retrievePersistedDataForGraph();
+    console.log('initGraphData: persistedData', persistedData);
+    const psuedoNodes = persistedData['nodes'];
+    const pseudoLinks = persistedData['links'];
+    that.nodes = [];
+    that.links = [];
+    // Instantiate real Node instances iso literal object:
+    for (const pseudoNode of psuedoNodes) {
+      const node = new Node(pseudoNode['id']);
+      // const node = new Node(pseudoNode['address']); // Here's where the bug is at: 'id' iso 'address'
+      node.x = Math.floor(Math.random() * 600) + 100;
+      node.y = Math.floor(Math.random() * 600) + 100;
+      node.linkCount = pseudoNode['numChannels'];
+      that.nodes.push(node);
+    }
+    // Get the real Node instance iso literal object:
+    for (const pseudoLink of pseudoLinks) {
+      // const link = new Link(pseudoLink['source'], pseudoLink['target']);
+      const link = new Link(that.getMatchingNode(pseudoLink['source'], that.nodes), that.getMatchingNode(pseudoLink['target'], that.nodes));
+      that.links.push(link);
+    }
   }
 
   /*  Return the node matching the provided address:
