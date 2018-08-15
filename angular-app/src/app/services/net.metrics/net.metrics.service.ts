@@ -191,11 +191,11 @@ export class NetMetricsService {
       if (!(key === that.numNetworksKey)) {
         const obj = that.currentMetrics[key];
         restructuredData.nodes.push({
-          node: obj[that.tokenAddressKey],
-          address: obj[that.tokenAddressKey],
-          id: obj[that.tokenAddressKey],
-          weight: Math.floor(Math.random() * 999) + 100,
-          numChannels: obj[that.numChannelsKey]
+          // node: obj[that.tokenAddressKey],
+          // address: obj[that.tokenAddressKey],
+          // weight: Math.floor(Math.random() * 999) + 100,
+          // numChannels: obj[that.numChannelsKey],
+          id: obj[that.tokenAddressKey]
         }); // push
         const objChannels = obj[that.channelsKey];
         for (const channel of objChannels) {
@@ -216,7 +216,8 @@ export class NetMetricsService {
   */
   public retrievePersistedDataForGraph(): NMRestructuredData {
     // Temporary fix using json file because restructuredData causes error:
-    const data = require('../../../../../mock/data/graphics-data.json');
+    // const data: NMRestructuredData = require('../../../../../mock/data/graphics-data.json');
+    const data = this.restructuredData;
     return data;
   }
 

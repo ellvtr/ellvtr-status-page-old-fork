@@ -113,8 +113,13 @@ export class HomeComponent implements OnInit {
     // Get the real Node instance iso literal object:
     for (const pseudoLink of pseudoLinks) {
       // const link = new Link(pseudoLink['source'], pseudoLink['target']);
-      const link = new Link(that.getMatchingNode(pseudoLink['source'], that.nodes), that.getMatchingNode(pseudoLink['target'], that.nodes));
-      that.links.push(link);
+      const src = that.getMatchingNode(pseudoLink['source'], that.nodes),
+        trg = that.getMatchingNode(pseudoLink['target'], that.nodes);
+      // Only add link if match:
+      if(src && trg){
+        const link = new Link(src, trg);
+        that.links.push(link);
+      }
     }
   }
 
