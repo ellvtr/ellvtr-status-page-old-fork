@@ -14,6 +14,7 @@ import {NMRestructuredData} from '../../models/NMRestructuredData';
 export class HomeComponent implements OnInit {
 
   public currentMetrics: any;
+  public restructuredData: NMRestructuredData;
   public numUniqueUsers = 0;
   public numNetworks = 0;
   public numTotalChannels = 0;
@@ -54,7 +55,8 @@ export class HomeComponent implements OnInit {
     // (no need for promise; refactor to sequence)
     const _updGraphData = ()=>{
       const rsData: NMRestructuredData = that.netMetricsService.restructureAndPersistData();
-      console.log('_updGraphData', rsData);
+      // console.log('_updGraphData', rsData);
+      this.restructuredData = rsData;
       that.initGraphData();
     };
 
@@ -74,7 +76,7 @@ export class HomeComponent implements OnInit {
     // (temp: clears interval after a while to spare server)
     _getMetrics();
     const si = setInterval(_getMetrics, 3000);
-    setTimeout(a=>{ clearInterval(si) }, 12e3)
+    // setTimeout(a=>{ clearInterval(si) }, 12e3)
 
   } // updateMetrics
 
@@ -95,8 +97,8 @@ export class HomeComponent implements OnInit {
   */
   public initGraphData() {
     const that = this;
-    const persistedData = that.netMetricsService.retrievePersistedDataForGraph();
-    console.log('initGraphData: persistedData', persistedData);
+    const persistedData: NMRestructuredData = that.netMetricsService.retrievePersistedDataForGraph();
+    // console.log('initGraphData: persistedData', persistedData);
     const psuedoNodes = persistedData['nodes'];
     const pseudoLinks = persistedData['links'];
     that.nodes = [];

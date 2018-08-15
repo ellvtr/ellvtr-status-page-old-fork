@@ -184,29 +184,23 @@ export class NetMetricsService {
       to the `this.restructuredData` property. 
   */
   public restructureAndPersistData(): NMRestructuredData {
-    const that = this;
     const restructuredData: NMRestructuredData = {nodes: [], links: []};
-    // 
     Object.keys(this.currentMetrics).map((key: string) => {
-      if (!(key === that.numNetworksKey)) {
-        const obj = that.currentMetrics[key];
-        restructuredData.nodes.push({
-          // node: obj[that.tokenAddressKey],
-          // address: obj[that.tokenAddressKey],
-          // weight: Math.floor(Math.random() * 999) + 100,
-          // numChannels: obj[that.numChannelsKey],
-          id: obj[that.tokenAddressKey]
-        }); // push
-        const objChannels = obj[that.channelsKey];
+      if (!(key === this.numNetworksKey)) {
+        const obj = this.currentMetrics[key];
+        const objNodes = obj[this.usersKey];
+        objNodes.forEach(id=>{
+          restructuredData.nodes.push({id});
+        }); 
+        const objChannels = obj[this.channelsKey];
         for (const channel of objChannels) {
           restructuredData.links.push({
-            source: channel[that.channelSourceKey],
-            target: channel[that.channelTargetKey],
-          });
+            source: channel[this.channelSourceKey],
+            target: channel[this.channelTargetKey],
+          }); // push
         } // for
       } // if(!(key ...
     }); // Object.keys .. .map
-    console.log('restructureAndPersistData: done with "Object.keys .. .map". restructuredData:', restructuredData);
     this.restructuredData = restructuredData;
     return restructuredData;
   } // restructureAndPersistData
